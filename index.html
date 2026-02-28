@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Piti & Blink — Wedding RSVP</title>
+  <title>Blink & Piti — Wedding RSVP</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -354,6 +354,46 @@
     }
 
     /* ════════════════════════════════
+       MAP SECTION
+    ════════════════════════════════ */
+    .map-section {
+      padding: 72px 20px;
+      background: var(--ivory-dark);
+      text-align: center;
+    }
+
+    .map-wrapper {
+      max-width: 900px;
+      margin: 40px auto 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+    }
+
+    .map-wrapper iframe {
+      width: 100%;
+      height: 420px;
+      border: none;
+      display: block;
+    }
+
+    .map-address {
+      margin-top: 20px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    .map-address a {
+      color: var(--green-mid);
+      text-decoration: none;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+    }
+    .map-address a:hover { text-decoration: underline; }
+
+    /* ════════════════════════════════
        RSVP SECTION
     ════════════════════════════════ */
     .rsvp-section {
@@ -640,11 +680,11 @@
   <div class="hero-content">
     <p class="hero-eyebrow">Together with their families</p>
     <h1 class="hero-names">
-      Piti <span class="amp">&amp;</span> Blink
+      Blink <span class="amp">&amp;</span> Piti
     </h1>
     <div class="hero-divider"></div>
     <div class="hero-date">
-      <div>Saturday · 14 June 2026</div>
+      <div>Sunday · 24 January 2027</div>
       <div>Park Nailert · Bangkok</div>
     </div>
   </div>
@@ -733,11 +773,35 @@
 </div>
 
 <!-- ════════════════════════════════
+     MAP / LOCATION
+════════════════════════════════ -->
+<section class="map-section">
+  <div class="reveal">
+    <p class="section-eyebrow">Getting There</p>
+    <h2 class="section-title">Find Us</h2>
+    <p class="section-sub">Park Nailert · Bangkok, Thailand</p>
+  </div>
+  <div class="map-wrapper reveal">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.6477!2d100.54669!3d13.73932!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29ed2f66afbf9%3A0x9f4e0ecb9a26c8c0!2sPark%20Nailert!5e0!3m2!1sen!2sth!4v1700000000000"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="Park Nailert location map">
+    </iframe>
+  </div>
+  <p class="map-address reveal">
+    2 Wireless Road, Lumphini, Pathumwan, Bangkok 10330<br>
+    <a href="https://maps.google.com/?q=Park+Nailert+Bangkok" target="_blank" rel="noopener">Open in Google Maps &rarr;</a>
+  </p>
+</section>
+
+<!-- ════════════════════════════════
      RSVP FORM
 ════════════════════════════════ -->
 <section class="rsvp-section">
   <div class="reveal" style="text-align:center">
-    <p class="section-eyebrow">Kindly reply by 15 May 2026</p>
+    <p class="section-eyebrow">Kindly reply by 15 December 2026</p>
     <h2 class="section-title">RSVP</h2>
     <p class="section-sub" style="color:rgba(255,255,255,0.5)">We look forward to celebrating with you</p>
   </div>
@@ -841,7 +905,7 @@
 </section>
 
 <footer>
-  <span>Piti &amp; Blink</span> &nbsp;·&nbsp; 14 June 2026 &nbsp;·&nbsp; Park Nailert, Bangkok
+  <span>Blink &amp; Piti</span> &nbsp;·&nbsp; 24 January 2027 &nbsp;·&nbsp; Park Nailert, Bangkok
 </footer>
 
 <script>
@@ -857,7 +921,7 @@
   /* ────────────────────────────────
      COUNTDOWN TIMER
   ──────────────────────────────── */
-  const WEDDING = new Date('2026-06-14T16:00:00+07:00').getTime();
+  const WEDDING = new Date('2027-01-24T16:00:00+07:00').getTime();
 
   function pad(n) { return String(n).padStart(2, '0'); }
 
