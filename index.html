@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piti & Blink — Wedding RSVP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Reset & tokens ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-deep:  #1a3d10;
+      --green-mid:   #2d5a1c;
+      --green-light: #eaf2e2;
+      --gold:        #c8a228;
+      --gold-light:  #f0dc90;
+      --teak:        #5c3317;
+      --ivory:       #f8f4ed;
+      --ivory-dark:  #ede8de;
+      --white:       #ffffff;
+      --text:        #2c1a0e;
+      --text-muted:  #6b5030;
+      --radius:      4px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--ivory);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Fade-in animation ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ════════════════════════════════
+       HERO
+    ════════════════════════════════ */
+    .hero {
+      position: relative;
+      height: 100svh;
+      min-height: 560px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      color: var(--white);
+    }
+
+    /* Parallax background */
+    .hero-bg {
+      position: absolute;
+      inset: -60px 0;
+      background:
+        url('https://nailertgroup.com/wp-content/uploads/2024/06/heritage-home-slide.jpg')
+        center center / cover no-repeat;
+      will-change: transform;
+      z-index: 0;
+    }
+
+    /* Dark green overlay */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(16,36,8,0.55) 0%,
+        rgba(16,36,8,0.40) 50%,
+        rgba(16,36,8,0.70) 100%
+      );
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 20px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: clamp(0.65rem, 1.8vw, 0.8rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.3s forwards;
+    }
+
+    .hero-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(3rem, 10vw, 7rem);
+      line-height: 1.05;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp 1s ease 0.6s forwards;
+    }
+
+    .hero-names .amp {
+      font-style: italic;
+      color: var(--gold-light);
+      font-size: 0.75em;
+    }
+
+    .hero-divider {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 28px auto;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.9s forwards;
+    }
+
+    .hero-date {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: clamp(0.85rem, 2.5vw, 1rem);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      line-height: 2;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.1s forwards;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.8s forwards;
+    }
+    .scroll-hint .arrow {
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.4));
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(20px); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50%       { opacity: 0.8; transform: scaleY(1.2); }
+    }
+
+    /* ════════════════════════════════
+       COUNTDOWN
+    ════════════════════════════════ */
+    .countdown-section {
+      background: var(--green-deep);
+      color: var(--white);
+      padding: 56px 20px;
+      text-align: center;
+    }
+
+    .countdown-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 32px;
+    }
+
+    .countdown-grid {
+      display: flex;
+      justify-content: center;
+      gap: clamp(16px, 4vw, 48px);
+    }
+
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      min-width: 64px;
+    }
+
+    .countdown-unit .number {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2.5rem, 7vw, 4rem);
+      line-height: 1;
+      color: var(--white);
+      transition: transform 0.3s ease;
+    }
+    .countdown-unit .number.bump {
+      transform: scale(1.15);
+    }
+
+    .countdown-unit .unit-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .countdown-sep {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      color: var(--gold);
+      align-self: center;
+      padding-bottom: 16px;
+      opacity: 0.6;
+    }
+
+    /* ════════════════════════════════
+       VENUE GALLERY
+    ════════════════════════════════ */
+    .gallery-section {
+      padding: 72px 20px;
+      background: var(--ivory);
+      text-align: center;
+    }
+
+    .section-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      color: var(--green-deep);
+      margin-bottom: 8px;
+    }
+
+    .section-sub {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      margin-bottom: 40px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 240px 200px;
+      gap: 10px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 640px) {
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 160px 160px 160px;
+      }
+      .gallery-item:first-child { grid-column: 1 / -1; }
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+    .gallery-item:first-child { grid-row: 1 / 3; }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      display: block;
+    }
+    .gallery-item:hover img { transform: scale(1.06); }
+
+    .gallery-item .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(26, 61, 16, 0);
+      transition: background 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gallery-item:hover .overlay {
+      background: rgba(26, 61, 16, 0.35);
+    }
+    .gallery-item .overlay svg {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      color: white;
+    }
+    .gallery-item:hover .overlay svg { opacity: 1; }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: var(--radius);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      background: none;
+      border: none;
+    }
+
+    /* ════════════════════════════════
+       RSVP SECTION
+    ════════════════════════════════ */
+    .rsvp-section {
+      background: var(--green-deep);
+      padding: 80px 20px;
+    }
+
+    .rsvp-section .section-eyebrow { color: var(--gold); }
+    .rsvp-section .section-title   { color: var(--white); }
+    .rsvp-section .section-sub     { color: rgba(255,255,255,0.55); }
+
+    .card {
+      max-width: 560px;
+      margin: 40px auto 0;
+      background: var(--ivory);
+      border-radius: var(--radius);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+      padding: 48px 44px 56px;
+    }
+    @media (max-width: 600px) { .card { padding: 32px 22px 40px; } }
+
+    /* ── Form elements ── */
+    .form-group { margin-bottom: 22px; position: relative; }
+
+    label.field-label {
+      display: block;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 7px;
+      transition: color 0.2s;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #d0c5b0;
+      border-radius: var(--radius);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color 0.25s, box-shadow 0.25s;
+      appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--green-mid);
+      box-shadow: 0 0 0 3px rgba(45,90,28,0.12);
+    }
+    .form-group:focus-within label.field-label { color: var(--green-mid); }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b5030' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    textarea { resize: vertical; min-height: 90px; }
+
+    /* Attendance radio */
+    .radio-group { display: flex; gap: 10px; }
+    .radio-option {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #d0c5b0;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      background: var(--white);
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--text);
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+      user-select: none;
+    }
+    .radio-option:hover { border-color: var(--green-mid); }
+    .radio-option input[type="radio"] { display: none; }
+    .radio-dot {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #c0b59a;
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: border-color 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .radio-dot::after {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green-mid);
+      transform: scale(0);
+      transition: transform 0.2s ease;
+    }
+    .radio-option.selected {
+      border-color: var(--green-mid);
+      background: var(--green-light);
+      color: var(--green-deep);
+    }
+    .radio-option.selected .radio-dot {
+      border-color: var(--green-mid);
+    }
+    .radio-option.selected .radio-dot::after { transform: scale(1); }
+
+    /* Guest section */
+    #guest-section {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.5s ease, opacity 0.4s ease;
+    }
+    #guest-section.open {
+      max-height: 600px;
+      opacity: 1;
+    }
+
+    /* Meal checkboxes */
+    .meal-options { display: flex; flex-direction: column; gap: 8px; }
+    .meal-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid #d0c5b0;
+      border-radius: var(--radius);
+      padding: 11px 14px;
+      background: var(--white);
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: var(--text);
+      transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .meal-option:hover { border-color: var(--green-mid); }
+    .meal-option input[type="checkbox"] { display: none; }
+    .meal-check {
+      width: 17px;
+      height: 17px;
+      border: 2px solid #c0b59a;
+      border-radius: 3px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .meal-check svg { display: none; }
+    .meal-option.checked {
+      border-color: var(--green-mid);
+      background: var(--green-light);
+    }
+    .meal-option.checked .meal-check {
+      border-color: var(--green-mid);
+      background: var(--green-mid);
+    }
+    .meal-option.checked .meal-check svg { display: block; }
+
+    /* Validation */
+    .field-error { border-color: #c0392b !important; }
+    .error-msg {
+      font-size: 0.75rem;
+      color: #c0392b;
+      margin-top: 5px;
+      display: none;
+      align-items: center;
+      gap: 4px;
+    }
+    .error-msg.show { display: flex; }
+
+    /* Submit button */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      margin-top: 32px;
+      padding: 15px;
+      background: var(--green-deep);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.1s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background 0.2s;
+    }
+    .btn:hover  { background: var(--green-mid); box-shadow: 0 6px 24px rgba(26,61,16,0.35); }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { background: #8aaa80; cursor: not-allowed; box-shadow: none; }
+
+    /* Spinner */
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .btn.loading .spinner { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Success */
+    .success {
+      display: none;
+      text-align: center;
+      padding: 20px 0 10px;
+    }
+    .success .icon {
+      width: 64px;
+      height: 64px;
+      background: var(--green-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .success .icon svg { color: var(--green-mid); }
+    .success h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 1.8rem;
+      color: var(--green-deep);
+      margin-bottom: 12px;
+    }
+    .success p {
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-size: 0.9rem;
+      font-weight: 300;
+    }
+
+    /* ════════════════════════════════
+       FOOTER
+    ════════════════════════════════ */
+    footer {
+      background: var(--green-deep);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+      padding: 32px 20px;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+    }
+    footer span { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════
+     HERO
+════════════════════════════════ -->
+<header class="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Together with their families</p>
+    <h1 class="hero-names">
+      Piti <span class="amp">&amp;</span> Blink
+    </h1>
+    <div class="hero-divider"></div>
+    <div class="hero-date">
+      <div>Saturday · 14 June 2026</div>
+      <div>Park Nailert · Bangkok</div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="arrow"></div>
+  </div>
+</header>
+
+<!-- ════════════════════════════════
+     COUNTDOWN
+════════════════════════════════ -->
+<section class="countdown-section">
+  <p class="countdown-label">Counting down to the big day</p>
+  <div class="countdown-grid">
+    <div class="countdown-unit">
+      <div class="number" id="cd-days">—</div>
+      <div class="unit-label">Days</div>
+    </div>
+    <div class="countdown-sep">·</div>
+    <div class="countdown-unit">
+      <div class="number" id="cd-hours">—</div>
+      <div class="unit-label">Hours</div>
+    </div>
+    <div class="countdown-sep">·</div>
+    <div class="countdown-unit">
+      <div class="number" id="cd-mins">—</div>
+      <div class="unit-label">Minutes</div>
+    </div>
+    <div class="countdown-sep">·</div>
+    <div class="countdown-unit">
+      <div class="number" id="cd-secs">—</div>
+      <div class="unit-label">Seconds</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     VENUE GALLERY
+════════════════════════════════ -->
+<section class="gallery-section">
+  <div class="reveal">
+    <p class="section-eyebrow">The Venue</p>
+    <h2 class="section-title">Park Nailert, Bangkok</h2>
+    <p class="section-sub">A century-old heritage home nestled in the heart of the city</p>
+  </div>
+
+  <div class="gallery-grid reveal">
+    <div class="gallery-item" data-src="https://nailertgroup.com/wp-content/uploads/2024/06/heritage-home-slide.jpg">
+      <img src="https://nailertgroup.com/wp-content/uploads/2024/06/heritage-home-slide.jpg" alt="Park Nailert Heritage Home" loading="lazy" />
+      <div class="overlay">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/><path d="M11 8v6M8 11h6"/></svg>
+      </div>
+    </div>
+    <div class="gallery-item" data-src="https://nailertgroup.com/wp-content/uploads/2024/10/6.jpg">
+      <img src="https://nailertgroup.com/wp-content/uploads/2024/10/6.jpg" alt="Park Nailert Garden" loading="lazy" />
+      <div class="overlay">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/><path d="M11 8v6M8 11h6"/></svg>
+      </div>
+    </div>
+    <div class="gallery-item" data-src="https://nailertgroup.com/wp-content/uploads/2024/10/9.jpg">
+      <img src="https://nailertgroup.com/wp-content/uploads/2024/10/9.jpg" alt="Park Nailert Grounds" loading="lazy" />
+      <div class="overlay">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/><path d="M11 8v6M8 11h6"/></svg>
+      </div>
+    </div>
+    <div class="gallery-item" data-src="https://nailertgroup.com/wp-content/uploads/2024/10/11.jpg">
+      <img src="https://nailertgroup.com/wp-content/uploads/2024/10/11.jpg" alt="Park Nailert Interior" loading="lazy" />
+      <div class="overlay">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/><path d="M11 8v6M8 11h6"/></svg>
+      </div>
+    </div>
+    <div class="gallery-item" data-src="https://nailertgroup.com/wp-content/uploads/2024/10/12.jpg">
+      <img src="https://nailertgroup.com/wp-content/uploads/2024/10/12.jpg" alt="Park Nailert Details" loading="lazy" />
+      <div class="overlay">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/><path d="M11 8v6M8 11h6"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+  <img id="lightbox-img" src="" alt="Venue photo" />
+</div>
+
+<!-- ════════════════════════════════
+     RSVP FORM
+════════════════════════════════ -->
+<section class="rsvp-section">
+  <div class="reveal" style="text-align:center">
+    <p class="section-eyebrow">Kindly reply by 15 May 2026</p>
+    <h2 class="section-title">RSVP</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,0.5)">We look forward to celebrating with you</p>
+  </div>
+
+  <div class="card reveal">
+    <form id="rsvp-form" novalidate>
+
+      <!-- Name -->
+      <div class="form-group">
+        <label class="field-label" for="name">Full Name *</label>
+        <input type="text" id="name" placeholder="Your full name" autocomplete="name" />
+        <p class="error-msg" id="name-error">Please enter your name.</p>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label class="field-label" for="email">Email Address *</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+        <p class="error-msg" id="email-error">Please enter a valid email address.</p>
+      </div>
+
+      <!-- Attendance -->
+      <div class="form-group">
+        <label class="field-label">Will you attend? *</label>
+        <div class="radio-group">
+          <label class="radio-option" id="opt-yes">
+            <input type="radio" name="attendance" value="yes" />
+            <span class="radio-dot"></span>
+            Joyfully Accepts
+          </label>
+          <label class="radio-option" id="opt-no">
+            <input type="radio" name="attendance" value="no" />
+            <span class="radio-dot"></span>
+            Regretfully Declines
+          </label>
+        </div>
+        <p class="error-msg" id="attendance-error">Please select an option.</p>
+      </div>
+
+      <!-- Guest details (revealed when attending) -->
+      <div id="guest-section">
+        <div class="form-group">
+          <label class="field-label" for="guests">Number of Guests (including yourself)</label>
+          <input type="number" id="guests" min="1" max="6" value="1" />
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Meal Preference</label>
+          <div class="meal-options">
+            <label class="meal-option">
+              <input type="checkbox" name="meal" value="chicken" />
+              <span class="meal-check">
+                <svg width="10" height="8" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 10 8"><path d="M1 4l3 3 5-6"/></svg>
+              </span>
+              Chicken — Herb-roasted with lemon butter
+            </label>
+            <label class="meal-option">
+              <input type="checkbox" name="meal" value="fish" />
+              <span class="meal-check">
+                <svg width="10" height="8" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 10 8"><path d="M1 4l3 3 5-6"/></svg>
+              </span>
+              Fish — Pan-seared salmon with dill cream
+            </label>
+            <label class="meal-option">
+              <input type="checkbox" name="meal" value="vegetarian" />
+              <span class="meal-check">
+                <svg width="10" height="8" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 10 8"><path d="M1 4l3 3 5-6"/></svg>
+              </span>
+              Vegetarian — Wild mushroom risotto
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="dietary">Dietary Restrictions or Allergies</label>
+          <input type="text" id="dietary" placeholder="e.g. gluten-free, nut allergy…" />
+        </div>
+      </div>
+
+      <!-- Message -->
+      <div class="form-group">
+        <label class="field-label" for="message">Message for the Couple (optional)</label>
+        <textarea id="message" placeholder="Share your well wishes…"></textarea>
+      </div>
+
+      <button type="submit" class="btn" id="submit-btn">
+        <div class="spinner"></div>
+        <span class="btn-text">Send RSVP</span>
+      </button>
+    </form>
+
+    <!-- Success -->
+    <div class="success" id="success">
+      <div class="icon">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <h3 id="success-heading">Thank you!</h3>
+      <p id="success-body"></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Piti &amp; Blink</span> &nbsp;·&nbsp; 14 June 2026 &nbsp;·&nbsp; Park Nailert, Bangkok
+</footer>
+
+<script>
+  /* ────────────────────────────────
+     PARALLAX HERO
+  ──────────────────────────────── */
+  const heroBg = document.getElementById('hero-bg');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    heroBg.style.transform = `translateY(${y * 0.4}px)`;
+  }, { passive: true });
+
+  /* ────────────────────────────────
+     COUNTDOWN TIMER
+  ──────────────────────────────── */
+  const WEDDING = new Date('2026-06-14T16:00:00+07:00').getTime();
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function bumpNumber(el, value) {
+    const str = pad(value);
+    if (el.textContent !== str) {
+      el.classList.remove('bump');
+      void el.offsetWidth; // reflow
+      el.classList.add('bump');
+      setTimeout(() => el.classList.remove('bump'), 300);
+      el.textContent = str;
+    }
+  }
+
+  function tickCountdown() {
+    const now  = Date.now();
+    const diff = WEDDING - now;
+    if (diff <= 0) {
+      ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => {
+        document.getElementById(id).textContent = '00';
+      });
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000)  / 60000);
+    const s = Math.floor((diff % 60000)    / 1000);
+    bumpNumber(document.getElementById('cd-days'),  d);
+    bumpNumber(document.getElementById('cd-hours'), h);
+    bumpNumber(document.getElementById('cd-mins'),  m);
+    bumpNumber(document.getElementById('cd-secs'),  s);
+  }
+  tickCountdown();
+  setInterval(tickCountdown, 1000);
+
+  /* ────────────────────────────────
+     SCROLL REVEAL
+  ──────────────────────────────── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* ────────────────────────────────
+     GALLERY LIGHTBOX
+  ──────────────────────────────── */
+  const lightbox     = document.getElementById('lightbox');
+  const lightboxImg  = document.getElementById('lightbox-img');
+  const lightboxClose = document.getElementById('lightbox-close');
+
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    item.addEventListener('click', () => {
+      lightboxImg.src = item.dataset.src;
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  /* ────────────────────────────────
+     CUSTOM RADIO / CHECKBOX
+  ──────────────────────────────── */
+  document.querySelectorAll('input[name="attendance"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      document.querySelectorAll('.radio-option').forEach(el => el.classList.remove('selected'));
+      radio.closest('.radio-option').classList.add('selected');
+      const gs = document.getElementById('guest-section');
+      gs.classList.toggle('open', radio.value === 'yes');
+    });
+  });
+
+  document.querySelectorAll('.meal-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      opt.classList.toggle('checked');
+      opt.querySelector('input[type="checkbox"]').checked = opt.classList.contains('checked');
+    });
+  });
+
+  /* ────────────────────────────────
+     VALIDATION HELPERS
+  ──────────────────────────────── */
+  function showError(fieldId, errorId) {
+    if (fieldId) document.getElementById(fieldId)?.classList.add('field-error');
+    document.getElementById(errorId)?.classList.add('show');
+  }
+  function clearError(fieldId, errorId) {
+    if (fieldId) document.getElementById(fieldId)?.classList.remove('field-error');
+    document.getElementById(errorId)?.classList.remove('show');
+  }
+
+  document.getElementById('name').addEventListener('input',  () => clearError('name',  'name-error'));
+  document.getElementById('email').addEventListener('input', () => clearError('email', 'email-error'));
+  document.querySelectorAll('input[name="attendance"]').forEach(r =>
+    r.addEventListener('change', () => clearError(null, 'attendance-error'))
+  );
+
+  /* ────────────────────────────────
+     FORM SUBMIT → GOOGLE SHEETS
+  ──────────────────────────────── */
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwODxK01pJQ17wkPqJnd8xOedJKCToHvqMiP_h4VCIuKlL7qVys53IPpnrFe7ewsP7m7g/exec';
+
+  document.getElementById('rsvp-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const name       = document.getElementById('name').value.trim();
+    const email      = document.getElementById('email').value.trim();
+    const attendance = document.querySelector('input[name="attendance"]:checked');
+    let valid = true;
+
+    if (!name)  { showError('name',  'name-error');  valid = false; }
+    else          clearError('name',  'name-error');
+
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRe.test(email)) { showError('email', 'email-error'); valid = false; }
+    else                         clearError('email', 'email-error');
+
+    if (!attendance) {
+      showError(null, 'attendance-error');
+      valid = false;
+    } else {
+      clearError(null, 'attendance-error');
+    }
+
+    if (!valid) return;
+
+    const data = {
+      name,
+      email,
+      attending:   attendance.value,
+      guests:      document.getElementById('guests')?.value || null,
+      meals:       [...document.querySelectorAll('input[name="meal"]:checked')].map(c => c.value),
+      dietary:     document.getElementById('dietary')?.value.trim() || '',
+      message:     document.getElementById('message').value.trim(),
+      submittedAt: new Date().toISOString(),
+    };
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.classList.add('loading');
+    btn.querySelector('.btn-text').textContent = 'Sending…';
+
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      mode: 'no-cors',
+      body: JSON.stringify(data),
+    })
+    .then(() => {
+      document.getElementById('rsvp-form').style.display = 'none';
+      const success = document.getElementById('success');
+      success.style.display = 'block';
+
+      const first = name.split(' ')[0];
+      document.getElementById('success-heading').textContent =
+        attendance.value === 'yes'
+          ? `Thank you, ${first}!`
+          : `We'll miss you, ${first}.`;
+
+      document.getElementById('success-body').innerHTML =
+        attendance.value === 'yes'
+          ? `We're so excited to celebrate with you!<br>A confirmation has been noted for <strong>${email}</strong>.`
+          : `Thank you for letting us know. We hope to see you soon.`;
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      btn.querySelector('.btn-text').textContent = 'Send RSVP';
+      alert('Something went wrong. Please check your connection and try again.');
+    });
+  });
+</script>
+</body>
+</html>
